@@ -2,18 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 /**
  *
  * @author rahdi
  */
 public class PenghitungUmurFrame extends javax.swing.JFrame {
-
+private PenghitungUmurHelper helper;
     /**
      * Creates new form PenghitungUmurFrame
      */
     public PenghitungUmurFrame() {
         initComponents();
+    helper = new PenghitungUmurHelper();
     }
 
     /**
@@ -59,6 +63,12 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(19, 19, 19, 19);
         jPanel1.add(jLabel3, gridBagConstraints);
+
+        jDateChooser2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser2PropertyChange(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(19, 19, 19, 19);
         jPanel1.add(jDateChooser2, gridBagConstraints);
@@ -82,11 +92,21 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
         jPanel1.add(jTextField2, gridBagConstraints);
 
         jButton1.setText("Hitung Umur");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(19, 19, 19, 19);
         jPanel1.add(jButton1, gridBagConstraints);
 
         jButton2.setText("Keluar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(19, 19, 19, 19);
         jPanel1.add(jButton2, gridBagConstraints);
@@ -99,6 +119,39 @@ public class PenghitungUmurFrame extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    Date tanggalLahir = jDateChooser2.getDate();
+ if (tanggalLahir != null) {
+ // Menghitung umur dan hari ulang tahun berikutnya
+ LocalDate lahir =
+tanggalLahir.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+ LocalDate sekarang = LocalDate.now();
+ String umur = helper.hitungUmurDetail(lahir, sekarang);
+ jTextField1.setText(umur);
+
+ // Menghitung tanggal ulang tahun berikutnya
+ LocalDate ulangTahunBerikutnya =
+helper.hariUlangTahunBerikutnya(lahir, sekarang);
+ String hariUlangTahunBerikutnya =
+helper.getDayOfWeekInIndonesian(ulangTahunBerikutnya);
+ DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMyyyy");
+ String tanggalUlangTahunBerikutnya =
+ulangTahunBerikutnya.format(formatter);
+ jTextField2.setText(hariUlangTahunBerikutnya + "(" + tanggalUlangTahunBerikutnya + ")");
+ }
+}         // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+System.exit(0);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
+    jTextField1.setText("");
+ jTextField2.setText("");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jDateChooser2PropertyChange
 
     /**
      * @param args the command line arguments
